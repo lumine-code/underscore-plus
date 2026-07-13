@@ -2,9 +2,12 @@
 
 Extends Underscore with utility functions used by Lumine packages.
 
-[![CI](https://github.com/lumine-code/underscore-plus/actions/workflows/ci.yml/badge.svg)](https://github.com/lumine-code/underscore-plus/actions/workflows/ci.yml)
+## Features
 
-The package exposes the complete [Underscore](https://underscorejs.org/) API together with helpers for key paths, deep object operations, equality checks, string conversion, event names, and keystroke labels.
+- **Complete Underscore API**: re-exports every function from [Underscore](https://underscorejs.org/).
+- **Object utilities**: adds key-path access, deep cloning, deep extension, and focused equality helpers.
+- **String utilities**: provides case conversion, escaping, pluralization, and readable event names.
+- **Keystroke labels**: formats platform-specific shortcut labels for Windows, macOS, and Linux.
 
 ## Installation
 
@@ -36,4 +39,4 @@ npm test
 
 ## Contributing
 
-Bug reports and contributions are welcome on GitHub.
+Got ideas to make this package better, found a bug, or want to help add new features? Just drop your thoughts on GitHub. Any feedback is welcome!
