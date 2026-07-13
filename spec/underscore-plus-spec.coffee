@@ -1,6 +1,16 @@
 _ = require '../lib/underscore-plus.js'
 
 describe "underscore extensions", ->
+  it "exposes writable CommonJS methods for spies and test doubles", ->
+    descriptor = Object.getOwnPropertyDescriptor(_, 'debounce')
+    expect(descriptor.writable).toBe true
+
+    originalDebounce = _.debounce
+    replacement = ->
+    _.debounce = replacement
+    expect(_.debounce).toBe replacement
+    _.debounce = originalDebounce
+
   describe "::adviseBefore(object, methodName, advice)", ->
     [object, calls] = []
 
