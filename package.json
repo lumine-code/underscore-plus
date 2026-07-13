@@ -1,55 +1,39 @@
 {
-  "name": "@pulsar-edit/underscore-plus",
-  "version": "1.8.3",
-  "description": "Underscore plus additional utilities",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/pulsar-edit/underscore-plus/raw/master/LICENSE.md"
-    }
-  ],
+  "name": "@lumine-code/underscore-plus",
+  "version": "2.0.0",
+  "description": "Extends Underscore with utility functions used by Lumine packages.",
+  "license": "MIT",
   "main": "./lib/underscore-plus.js",
   "scripts": {
-    "clean": "shx rm -rf lib",
-    "test": "jasmine-focused --captureExceptions --coffee spec",
-    "lint": "coffeelint spec/*.coffee",
-    "bower": "shx mkdir -p dist && shx cp -r lib/*.js ./dist",
-    "babel": "npm run clean && shx cp -r src lib && cross-env NODE_ENV=development cross-env BABEL_ENV=development babel lib --out-dir lib && shx rm -f lib/*.mjs",
-    "build": "npm run babel",
-    "prepare": "npm run clean && npm run build && npm run bower"
+    "build": "node scripts/build.js",
+    "pretest": "npm run build",
+    "test": "jasmine",
+    "prepare": "npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pulsar-edit/underscore-plus.git"
-  },
-  "bugs": {
-    "url": "https://github.com/pulsar-edit/underscore-plus/issues"
-  },
+  "repository": "https://github.com/lumine-code/underscore-plus",
+  "bugs": "https://github.com/lumine-code/underscore-plus/issues",
+  "homepage": "https://github.com/lumine-code/underscore-plus/",
   "keywords": [
-    "underscore"
+    "underscore",
+    "utilities",
+    "lumine"
+  ],
+  "author": "lumine-code",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "lib"
   ],
   "dependencies": {
-    "underscore": "^1.10.2"
+    "underscore": "^1.13.8"
   },
   "devDependencies": {
-    "@types/underscore": "^1.10.3",
-    "jasmine-focused": "1.x",
-    "coffeelint": "^2.1.0",
-    "@babel/cli": "7.10.3",
-    "@babel/core": "7.10.3",
-    "@babel/plugin-proposal-export-namespace-from": "^7.10.4",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.4",
-    "@babel/plugin-proposal-optional-chaining": "^7.10.4",
-    "@babel/plugin-transform-modules-commonjs": "^7.10.4",
-    "shx": "^0.3.2",
-    "cross-env": "^7.0.2"
-  },
-  "coffeelintConfig": {
-    "no_empty_param_list": {
-      "level": "error"
-    },
-    "max_line_length": {
-      "level": "ignore"
-    }
+    "coffeescript": "2.7.0",
+    "esbuild": "^0.28.1",
+    "jasmine": "^6.3.0"
   }
 }
