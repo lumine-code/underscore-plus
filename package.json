@@ -32,7 +32,6 @@
     "underscore": "^1.13.8"
   },
   "devDependencies": {
-    "coffeescript": "2.7.0",
     "esbuild": "^0.28.1",
     "jasmine": "^6.3.0"
   }
