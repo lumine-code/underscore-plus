@@ -15,7 +15,9 @@
   "homepage": "https://github.com/lumine-code/underscore-plus/",
   "keywords": [
     "underscore",
-    "utilities",
+    "key-path",
+    "string",
+    "functional",
     "lumine"
   ],
   "author": "lumine-code",
