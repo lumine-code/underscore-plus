@@ -1,6 +1,6 @@
-# @lumine-code/underscore-plus
+# underscore-plus
 
-Extends Underscore with utility functions used by Lumine packages.
+Extends Underscore with additional utility functions.
 
 ## Features
 
