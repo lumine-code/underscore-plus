@@ -16,7 +16,7 @@ esbuild.buildSync({
   format: 'cjs',
   platform: 'node',
   sourcemap: true,
-  target: 'node20'
+  target: 'node24'
 })
 
 fs.writeFileSync(
