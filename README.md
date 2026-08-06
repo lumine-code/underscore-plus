@@ -18,16 +18,16 @@ npm install @lumine-code/underscore-plus
 ## Usage
 
 ```js
-const _ = require('@lumine-code/underscore-plus')
+const _ = require("@lumine-code/underscore-plus");
 
-_.humanizeEventName('workspace:did-change')
-_.valueForKeyPath({editor: {fontSize: 16}}, 'editor.fontSize')
+_.humanizeEventName("workspace:did-change");
+_.valueForKeyPath({ editor: { fontSize: 16 } }, "editor.fontSize");
 ```
 
 ES modules can import individual helpers or the default combined API:
 
 ```js
-import _, {deepExtend, escapeRegExp} from '@lumine-code/underscore-plus'
+import _, { deepExtend, escapeRegExp } from "@lumine-code/underscore-plus";
 ```
 
 ## Building

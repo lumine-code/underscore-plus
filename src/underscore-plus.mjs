@@ -1,59 +1,73 @@
-export * from 'underscore';
-import * as _ from 'underscore';
+export * from "underscore";
+import * as _ from "underscore";
 
-import {every, flatten, has, include, isArray, isElement, isEqual as _isEqual, isFunction, isObject, isRegExp, uniq} from "underscore";
+import {
+  every,
+  flatten,
+  has,
+  include,
+  isArray,
+  isElement,
+  isEqual as _isEqual,
+  isFunction,
+  isObject,
+  isRegExp,
+  uniq,
+} from "underscore";
 
 const macModifierKeyMap = {
-  cmd: '\u2318',
-  ctrl: '\u2303',
-  alt: '\u2325',
-  option: '\u2325',
-  shift: '\u21e7',
-  enter: '\u23ce',
-  left: '\u2190',
-  right: '\u2192',
-  up: '\u2191',
-  down: '\u2193',
-  cmdorctrl: '\u2318'
+  cmd: "\u2318",
+  ctrl: "\u2303",
+  alt: "\u2325",
+  option: "\u2325",
+  shift: "\u21e7",
+  enter: "\u23ce",
+  left: "\u2190",
+  right: "\u2192",
+  up: "\u2191",
+  down: "\u2193",
+  cmdorctrl: "\u2318",
 };
 
 const nonMacModifierKeyMap = {
-  cmd: 'Cmd',
-  ctrl: 'Ctrl',
-  alt: 'Alt',
-  option: 'Alt',
-  shift: 'Shift',
-  enter: 'Enter',
-  left: 'Left',
-  right: 'Right',
-  up: 'Up',
-  down: 'Down',
-  cmdorctrl: 'Ctrl'
+  cmd: "Cmd",
+  ctrl: "Ctrl",
+  alt: "Alt",
+  option: "Alt",
+  shift: "Shift",
+  enter: "Enter",
+  left: "Left",
+  right: "Right",
+  up: "Up",
+  down: "Down",
+  cmdorctrl: "Ctrl",
 };
 
 // Human key combos should always explicitly state the shift key. This map is a disambiguator.
 // 'shift-version': 'no-shift-version'
 const shiftKeyMap = {
-  '~': '`',
-  '_': '-',
-  '+': '=',
-  '|': '\\',
-  '{': '[',
-  '}': ']',
-  ':': ';',
-  '"': '\'',
-  '<': ',',
-  '>': '.',
-  '?': '/'
+  "~": "`",
+  _: "-",
+  "+": "=",
+  "|": "\\",
+  "{": "[",
+  "}": "]",
+  ":": ";",
+  '"': "'",
+  "<": ",",
+  ">": ".",
+  "?": "/",
 };
 
 function splitKeyPath(keyPath) {
   let startIndex = 0;
   const keyPathArray = [];
-  if (keyPath == null) { return keyPathArray; }
+  if (keyPath == null) {
+    return keyPathArray;
+  }
   for (let i = 0; i < keyPath.length; i++) {
     const char = keyPath[i];
-    if ((char === '.') && ((i === 0) || (keyPath[i-1] !== '\\'))) {
+    if (char === "." && (i === 0 || keyPath[i - 1] !== "\\")) {
       keyPathArray.push(keyPath.substring(startIndex, i));
       startIndex = i + 1;
     }
@@ -62,30 +76,32 @@ function splitKeyPath(keyPath) {
   return keyPathArray;
 }
 
-const isPlainObject = value => isObject(value) && !isArray(value);
+const isPlainObject = (value) => isObject(value) && !isArray(value);
 
 export function adviseBefore(object, methodName, advice) {
   const original = object[methodName];
-  return object[methodName] = function(...args) {
+  return (object[methodName] = function (...args) {
     if (advice.apply(this, args) !== false) {
       return original.apply(this, args);
     }
-  };
+  });
 }
 
 export function camelize(string) {
   if (string) {
-    return string.replace(/[_-]+(\w)/g, m => m[1].toUpperCase());
+    return string.replace(/[_-]+(\w)/g, (m) => m[1].toUpperCase());
   } else {
-    return '';
+    return "";
   }
 }
 
 export function capitalize(word) {
-  if (!word) { return ''; }
+  if (!word) {
+    return "";
+  }
 
-  if (word.toLowerCase() === 'github') {
-    return 'GitHub';
+  if (word.toLowerCase() === "github") {
+    return "GitHub";
   } else {
     return word[0].toUpperCase() + word.slice(1);
   }
@@ -95,16 +111,20 @@ export function compactObject(object) {
   const newObject = {};
   for (let key in object) {
     const value = object[key];
-    if (value != null) { newObject[key] = value; }
+    if (value != null) {
+      newObject[key] = value;
+    }
   }
   return newObject;
 }
 
 export function dasherize(string) {
-  if (!string) { return ''; }
+  if (!string) {
+    return "";
+  }
 
   string = string[0].toLowerCase() + string.slice(1);
-  return string.replace(/([A-Z])|(_)/g, function(m, letter) {
+  return string.replace(/([A-Z])|(_)/g, function (m, letter) {
     if (letter) {
       return "-" + letter.toLowerCase();
     } else {
@@ -120,7 +140,7 @@ export function dasherize(string) {
 // Returns a deep clone of the JSON object.
 export function deepClone(object) {
   if (isArray(object)) {
-    return object.map(value => deepClone(value));
+    return object.map((value) => deepClone(value));
   } else if (isObject(object) && !isFunction(object)) {
     return mapObject(object, (key, value) => [key, deepClone(value)]);
   } else {
@@ -134,7 +154,7 @@ export function deepExtend(target) {
   while (++i < arguments.length) {
     const object = arguments[i];
     if (isPlainObject(result) && isPlainObject(object)) {
-      const keys = Object.keys(object)
+      const keys = Object.keys(object);
       for (let key of keys) {
         result[key] = deepExtend(result[key], object[key]);
       }
@@ -146,15 +166,21 @@ export function deepExtend(target) {
 }
 
 export function deepContains(array, target) {
-  if (array == null) { return false; }
+  if (array == null) {
+    return false;
+  }
   for (let object of array) {
-    if (_isEqual(object, target)) { return true; }
+    if (_isEqual(object, target)) {
+      return true;
+    }
   }
   return false;
 }
 
 export function endsWith(string, suffix) {
-  if (suffix == null) { suffix = ''; }
+  if (suffix == null) {
+    suffix = "";
+  }
   if (string) {
     return string.indexOf(suffix, string.length - suffix.length) !== -1;
   } else {
@@ -164,45 +190,55 @@ export function endsWith(string, suffix) {
 
 export function escapeAttribute(string) {
   if (string) {
-    return string.replace(/"/g, '&quot;').replace(/\n/g, '').replace(/\\/g, '-');
+    return string.replace(/"/g, "&quot;").replace(/\n/g, "").replace(/\\/g, "-");
   } else {
-    return '';
+    return "";
   }
 }
 
 export function escapeRegExp(string) {
   if (string) {
-    return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
   } else {
-    return '';
+    return "";
   }
 }
 
 export function humanizeEventName(eventName, eventDoc) {
-  const [namespace, event]  = eventName.split(':');
-  if (event == null) { return undasherize(namespace); }
+  const [namespace, event] = eventName.split(":");
+  if (event == null) {
+    return undasherize(namespace);
+  }
 
   const namespaceDoc = undasherize(namespace);
-  if (eventDoc == null) { eventDoc = undasherize(event); }
+  if (eventDoc == null) {
+    eventDoc = undasherize(event);
+  }
 
   return `${namespaceDoc}: ${eventDoc}`;
 }
 
-export function humanizeKey(key, platform=process.platform) {
-  if (!key) { return key; }
+export function humanizeKey(key, platform = process.platform) {
+  if (!key) {
+    return key;
+  }
 
-  const modifierKeyMap = platform === 'darwin' ? macModifierKeyMap : nonMacModifierKeyMap;
+  const modifierKeyMap = platform === "darwin" ? macModifierKeyMap : nonMacModifierKeyMap;
 
   if (modifierKeyMap[key]) {
     return modifierKeyMap[key];
-  } else if ((key.length === 1) && (shiftKeyMap[key] != null)) {
+  } else if (key.length === 1 && shiftKeyMap[key] != null) {
     return [modifierKeyMap.shift, shiftKeyMap[key]];
-  } else if ((key.length === 1) && (key === key.toUpperCase()) && (key.toUpperCase() !== key.toLowerCase())) {
+  } else if (
+    key.length === 1 &&
+    key === key.toUpperCase() &&
+    key.toUpperCase() !== key.toLowerCase()
+  ) {
     return [modifierKeyMap.shift, key.toUpperCase()];
-  } else if ((key.length === 1) || /f[0-9]{1,2}/.test(key)) {
+  } else if (key.length === 1 || /f[0-9]{1,2}/.test(key)) {
     return key.toUpperCase();
   } else {
-    if (platform === 'darwin') {
+    if (platform === "darwin") {
       return key;
     } else {
       return capitalize(key);
@@ -219,42 +255,50 @@ export function humanizeKey(key, platform=process.platform) {
 //             `process.platform`).
 //
 // Returns a humanized representation of the keystroke.
-export function humanizeKeystroke(keystroke, platform=process.platform) {
-    if (!keystroke) { return keystroke; }
+export function humanizeKeystroke(keystroke, platform = process.platform) {
+  if (!keystroke) {
+    return keystroke;
+  }
 
-  const keystrokes = keystroke.split(' ');
+  const keystrokes = keystroke.split(" ");
   const humanizedKeystrokes = [];
   for (keystroke of keystrokes) {
     let keys = [];
-    const splitKeystroke = keystroke.split('-');
+    const splitKeystroke = keystroke.split("-");
     for (let index = 0; index < splitKeystroke.length; index++) {
       // Check for consecutive dashes such as cmd--
       let key = splitKeystroke[index];
-      if ((key === '') && (splitKeystroke[index-1] === '')) { key = '-'; }
-      if (key) { keys.push(humanizeKey(key, platform)); }
+      if (key === "" && splitKeystroke[index - 1] === "") {
+        key = "-";
+      }
+      if (key) {
+        keys.push(humanizeKey(key, platform));
+      }
     }
 
     keys = uniq(flatten(keys));
-    if (platform === 'darwin') {
-      keys = keys.join('');
+    if (platform === "darwin") {
+      keys = keys.join("");
     } else {
-      keys = keys.join('+');
+      keys = keys.join("+");
     }
     humanizedKeystrokes.push(keys);
   }
 
-  return humanizedKeystrokes.join(' ');
+  return humanizedKeystrokes.join(" ");
 }
 
 export function isSubset(potentialSubset, potentialSuperset) {
-  return every(potentialSubset, element => include(potentialSuperset, element));
+  return every(potentialSubset, (element) => include(potentialSuperset, element));
 }
 
 export function losslessInvert(hash) {
   const inverted = {};
   for (let key in hash) {
     const value = hash[key];
-    if (inverted[value] == null) { inverted[value] = []; }
+    if (inverted[value] == null) {
+      inverted[value] = [];
+    }
     inverted[value].push(key);
   }
   return inverted;
@@ -270,7 +314,7 @@ export function losslessInvert(hash) {
 // Returns a new object based with the key/values returned by the iterator.
 export function mapObject(object, iterator) {
   const newObject = {};
-  const keys = Object.keys(object)
+  const keys = Object.keys(object);
   for (let key of keys) {
     let value;
     [key, value] = iterator(key, object[key]);
@@ -290,7 +334,7 @@ export function multiplyString(string, n) {
   return finalString;
 }
 
-export function pluralize(count=0, singular, plural=singular+'s') {
+export function pluralize(count = 0, singular, plural = singular + "s") {
   if (count === 1) {
     return `${count} ${singular}`;
   } else {
@@ -300,7 +344,9 @@ export function pluralize(count=0, singular, plural=singular+'s') {
 
 export function remove(array, element) {
   const index = array.indexOf(element);
-  if (index >= 0) { array.splice(index, 1); }
+  if (index >= 0) {
+    array.splice(index, 1);
+  }
   return array;
 }
 
@@ -308,7 +354,9 @@ export function setValueForKeyPath(object, keyPath, value) {
   const keys = splitKeyPath(keyPath);
   while (keys.length > 1) {
     const key = keys.shift();
-    if (object[key] == null) { object[key] = {}; }
+    if (object[key] == null) {
+      object[key] = {};
+    }
     object = object[key];
   }
   if (value != null) {
@@ -321,56 +369,74 @@ export function setValueForKeyPath(object, keyPath, value) {
 export function hasKeyPath(object, keyPath) {
   const keys = splitKeyPath(keyPath);
   for (let key of keys) {
-    if (!object.hasOwnProperty(key)) { return false; }
+    if (!Object.hasOwn(object, key)) {
+      return false;
+    }
     object = object[key];
   }
   return true;
 }
 
-export function spliceWithArray(originalArray, start, length, insertedArray, chunkSize=100000) {
+export function spliceWithArray(originalArray, start, length, insertedArray, chunkSize = 100000) {
   if (insertedArray.length < chunkSize) {
     originalArray.splice(start, length, ...insertedArray);
   } else {
-      originalArray.splice(start, length);
-      for (let chunkStart = 0, end = insertedArray.length;  chunkStart <= end; chunkStart += chunkSize) {
-        originalArray.splice(start + chunkStart, 0, ...insertedArray.slice(chunkStart, chunkStart + chunkSize));
-      }
+    originalArray.splice(start, length);
+    for (
+      let chunkStart = 0, end = insertedArray.length;
+      chunkStart <= end;
+      chunkStart += chunkSize
+    ) {
+      originalArray.splice(
+        start + chunkStart,
+        0,
+        ...insertedArray.slice(chunkStart, chunkStart + chunkSize),
+      );
+    }
   }
 }
 
 export function sum(array) {
   let sum = 0;
-  for (let elt of array) { sum += elt; }
+  for (let elt of array) {
+    sum += elt;
+  }
   return sum;
 }
 
 export function uncamelcase(string) {
-  if (!string) { return ''; }
+  if (!string) {
+    return "";
+  }
 
-  const result = string.replace(/([A-Z])|_+/g, (match, letter='') => ` ${letter}`);
+  const result = string.replace(/([A-Z])|_+/g, (match, letter = "") => ` ${letter}`);
   return capitalize(result.trim());
 }
 
 export function undasherize(string) {
   if (string) {
-    return string.split('-').map(capitalize).join(' ');
+    return string.split("-").map(capitalize).join(" ");
   } else {
-    return '';
+    return "";
   }
 }
 
 export function underscore(string) {
-  if (!string) { return ''; }
+  if (!string) {
+    return "";
+  }
 
   string = string[0].toLowerCase() + string.slice(1);
-  return string.replace(/([A-Z])|-+/g, (match, letter='') => `_${letter.toLowerCase()}`);
+  return string.replace(/([A-Z])|-+/g, (match, letter = "") => `_${letter.toLowerCase()}`);
 }
 
 export function valueForKeyPath(object, keyPath) {
   const keys = splitKeyPath(keyPath);
   for (let key of keys) {
     object = object[key];
-    if (object == null) { return; }
+    if (object == null) {
+      return;
+    }
   }
   return object;
 }
@@ -386,28 +452,36 @@ export function isEqual(a, b, aStack, bStack) {
 export function isEqualForProperties(a, b, ...properties) {
   // TODO is Array.from needed?
   for (let property of Array.from(properties)) {
-    if (!_isEqual(a[property], b[property])) { return false; }
+    if (!_isEqual(a[property], b[property])) {
+      return false;
+    }
   }
   return true;
 }
 
-function isEqual_(a, b, aStack=[], bStack=[]) {
-  if (a === b) { return _isEqual(a, b); }
-  if (isFunction(a) || isFunction(b)) { return _isEqual(a, b); }
+function isEqual_(a, b, aStack = [], bStack = []) {
+  if (a === b) {
+    return _isEqual(a, b);
+  }
+  if (isFunction(a) || isFunction(b)) {
+    return _isEqual(a, b);
+  }
 
   let stackIndex = aStack.length;
   while (stackIndex--) {
-    if (aStack[stackIndex] === a) { return bStack[stackIndex] === b; }
+    if (aStack[stackIndex] === a) {
+      return bStack[stackIndex] === b;
+    }
   }
   aStack.push(a);
   bStack.push(b);
 
-  let equal = false;
+  let equal;
   if (isFunction(a?.isEqual)) {
     equal = a.isEqual(b, aStack, bStack);
   } else if (isFunction(b?.isEqual)) {
     equal = b.isEqual(a, bStack, aStack);
-  } else if (isArray(a) && isArray(b) && (a.length === b.length)) {
+  } else if (isArray(a) && isArray(b) && a.length === b.length) {
     equal = true;
     for (let i = 0; i < a.length; i++) {
       const aElement = a[i];
@@ -425,7 +499,7 @@ function isEqual_(a, b, aStack=[], bStack=[]) {
     const bCtor = b.constructor;
     const aCtorValid = isFunction(aCtor) && aCtor instanceof aCtor;
     const bCtorValid = isFunction(bCtor) && bCtor instanceof bCtor;
-    if ((aCtor !== bCtor) && !(aCtorValid && bCtorValid)) {
+    if (aCtor !== bCtor && !(aCtorValid && bCtorValid)) {
       equal = false;
     } else {
       let key;
@@ -433,7 +507,9 @@ function isEqual_(a, b, aStack=[], bStack=[]) {
       equal = true;
       for (key in a) {
         const aValue = a[key];
-        if (!has(a, key)) { continue; }
+        if (!has(a, key)) {
+          continue;
+        }
         aKeyCount++;
         if (!has(b, key) || !isEqual_(aValue, b[key], aStack, bStack)) {
           equal = false;
@@ -443,8 +519,9 @@ function isEqual_(a, b, aStack=[], bStack=[]) {
       if (equal) {
         let bKeyCount = 0;
         for (key in b) {
-          const bValue = b[key];
-          if (has(b, key)) { bKeyCount++; }
+          if (has(b, key)) {
+            bKeyCount++;
+          }
         }
         equal = aKeyCount === bKeyCount;
       }
@@ -489,7 +566,7 @@ export default {
   underscore,
   valueForKeyPath,
   isEqual,
-  isEqualForProperties
+  isEqualForProperties,
 };
 
 // TODO: Consider shorter variations of null checks:

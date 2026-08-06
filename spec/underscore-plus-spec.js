@@ -1,46 +1,49 @@
 var _;
 
-_ = require('../lib/underscore-plus.js');
+_ = require("../lib/underscore-plus.js");
 
-describe("underscore extensions", function() {
-  it("exposes writable CommonJS methods for spies and test doubles", function() {
+describe("underscore extensions", function () {
+  it("exposes writable CommonJS methods for spies and test doubles", function () {
     var descriptor, originalDebounce, replacement;
-    descriptor = Object.getOwnPropertyDescriptor(_, 'debounce');
+    descriptor = Object.getOwnPropertyDescriptor(_, "debounce");
     expect(descriptor.writable).toBe(true);
     originalDebounce = _.debounce;
-    replacement = function() {};
+    replacement = function () {};
     _.debounce = replacement;
     expect(_.debounce).toBe(replacement);
-    return _.debounce = originalDebounce;
+    return (_.debounce = originalDebounce);
   });
-  describe("::adviseBefore(object, methodName, advice)", function() {
+  describe("::adviseBefore(object, methodName, advice)", function () {
     var calls, object;
     [object, calls] = [];
-    beforeEach(function() {
+    beforeEach(function () {
       calls = [];
-      return object = {
-        method: function(...args) {
+      return (object = {
+        method: function (...args) {
           return calls.push(["original", this, args]);
-        }
-      };
+        },
+      });
     });
-    it("calls the given function before the advised method", function() {
-      _.adviseBefore(object, 'method', function(...args) {
+    it("calls the given function before the advised method", function () {
+      _.adviseBefore(object, "method", function (...args) {
         return calls.push(["advice", this, args]);
       });
       object.method(1, 2, 3);
-      return expect(calls).toEqual([['advice', object, [1, 2, 3]], ['original', object, [1, 2, 3]]]);
+      return expect(calls).toEqual([
+        ["advice", object, [1, 2, 3]],
+        ["original", object, [1, 2, 3]],
+      ]);
     });
-    return it("cancels the original method's invocation if the advice returns false", function() {
-      _.adviseBefore(object, 'method', function() {
+    return it("cancels the original method's invocation if the advice returns false", function () {
+      _.adviseBefore(object, "method", function () {
         return false;
       });
       object.method(1, 2, 3);
       return expect(calls).toEqual([]);
     });
   });
-  describe("::endsWith(string, ending)", function() {
-    return it("returns whether the given string ends with the given suffix", function() {
+  describe("::endsWith(string, ending)", function () {
+    return it("returns whether the given string ends with the given suffix", function () {
       expect(_.endsWith("test.txt", ".txt")).toBeTruthy();
       expect(_.endsWith("test.txt", "txt")).toBeTruthy();
       expect(_.endsWith("test.txt", "test.txt")).toBeTruthy();
@@ -50,8 +53,8 @@ describe("underscore extensions", function() {
       return expect(_.endsWith("test.txt", "test")).toBeFalsy();
     });
   });
-  describe("::camelize(string)", function() {
-    return it("converts `string` to camel case", function() {
+  describe("::camelize(string)", function () {
+    return it("converts `string` to camel case", function () {
       expect(_.camelize("corey_dale_johnson")).toBe("coreyDaleJohnson");
       expect(_.camelize("corey-dale-johnson")).toBe("coreyDaleJohnson");
       expect(_.camelize("corey_dale-johnson")).toBe("coreyDaleJohnson");
@@ -59,145 +62,147 @@ describe("underscore extensions", function() {
       return expect(_.camelize("CoreyDaleJohnson")).toBe("CoreyDaleJohnson");
     });
   });
-  describe("::dasherize(string)", function() {
-    return it("converts `string` to use dashes", function() {
+  describe("::dasherize(string)", function () {
+    return it("converts `string` to use dashes", function () {
       expect(_.dasherize("corey_dale_johnson")).toBe("corey-dale-johnson");
       expect(_.dasherize("coreyDaleJohnson")).toBe("corey-dale-johnson");
       expect(_.dasherize("CoreyDaleJohnson")).toBe("corey-dale-johnson");
       return expect(_.dasherize("corey-dale-johnson")).toBe("corey-dale-johnson");
     });
   });
-  describe("::underscore(string)", function() {
-    return it("converts `string` to use underscores", function() {
-      expect(_.underscore('')).toBe('');
-      expect(_.underscore(null)).toBe('');
-      expect(_.underscore()).toBe('');
-      expect(_.underscore('a_b')).toBe('a_b');
-      expect(_.underscore('A_b')).toBe('a_b');
-      expect(_.underscore('a-b')).toBe('a_b');
-      expect(_.underscore('TheOffice')).toBe('the_office');
-      expect(_.underscore('theOffice')).toBe('the_office');
-      expect(_.underscore('test')).toBe('test');
-      expect(_.underscore(' test ')).toBe(' test ');
-      expect(_.underscore('--ParksAndRec')).toBe('__parks_and_rec');
+  describe("::underscore(string)", function () {
+    return it("converts `string` to use underscores", function () {
+      expect(_.underscore("")).toBe("");
+      expect(_.underscore(null)).toBe("");
+      expect(_.underscore()).toBe("");
+      expect(_.underscore("a_b")).toBe("a_b");
+      expect(_.underscore("A_b")).toBe("a_b");
+      expect(_.underscore("a-b")).toBe("a_b");
+      expect(_.underscore("TheOffice")).toBe("the_office");
+      expect(_.underscore("theOffice")).toBe("the_office");
+      expect(_.underscore("test")).toBe("test");
+      expect(_.underscore(" test ")).toBe(" test ");
+      expect(_.underscore("--ParksAndRec")).toBe("__parks_and_rec");
       expect(_.underscore("corey-dale-johnson")).toBe("corey_dale_johnson");
       expect(_.underscore("coreyDaleJohnson")).toBe("corey_dale_johnson");
       expect(_.underscore("CoreyDaleJohnson")).toBe("corey_dale_johnson");
       return expect(_.underscore("corey_dale_johnson")).toBe("corey_dale_johnson");
     });
   });
-  describe("::spliceWithArray(originalArray, start, length, insertedArray, chunkSize)", function() {
-    describe("when the inserted array is smaller than the chunk size", function() {
-      return it("splices the array in place", function() {
+  describe("::spliceWithArray(originalArray, start, length, insertedArray, chunkSize)", function () {
+    describe("when the inserted array is smaller than the chunk size", function () {
+      return it("splices the array in place", function () {
         var array;
-        array = ['a', 'b', 'c'];
-        _.spliceWithArray(array, 1, 1, ['v', 'w', 'x', 'y', 'z'], 100);
-        return expect(array).toEqual(['a', 'v', 'w', 'x', 'y', 'z', 'c']);
+        array = ["a", "b", "c"];
+        _.spliceWithArray(array, 1, 1, ["v", "w", "x", "y", "z"], 100);
+        return expect(array).toEqual(["a", "v", "w", "x", "y", "z", "c"]);
       });
     });
-    return describe("when the inserted array is larger than the chunk size", function() {
-      return it("splices the array in place one chunk at a time (to avoid stack overflows)", function() {
+    return describe("when the inserted array is larger than the chunk size", function () {
+      return it("splices the array in place one chunk at a time (to avoid stack overflows)", function () {
         var array;
-        array = ['a', 'b', 'c'];
-        _.spliceWithArray(array, 1, 1, ['v', 'w', 'x', 'y', 'z'], 2);
-        return expect(array).toEqual(['a', 'v', 'w', 'x', 'y', 'z', 'c']);
+        array = ["a", "b", "c"];
+        _.spliceWithArray(array, 1, 1, ["v", "w", "x", "y", "z"], 2);
+        return expect(array).toEqual(["a", "v", "w", "x", "y", "z", "c"]);
       });
     });
   });
-  describe("::humanizeEventName(eventName)", function() {
-    describe("when no namespace exists", function() {
-      return it("undasherizes and capitalizes the event name", function() {
-        expect(_.humanizeEventName('nonamespace')).toBe('Nonamespace');
-        return expect(_.humanizeEventName('no-name-space')).toBe('No Name Space');
+  describe("::humanizeEventName(eventName)", function () {
+    describe("when no namespace exists", function () {
+      return it("undasherizes and capitalizes the event name", function () {
+        expect(_.humanizeEventName("nonamespace")).toBe("Nonamespace");
+        return expect(_.humanizeEventName("no-name-space")).toBe("No Name Space");
       });
     });
-    return describe("when a namespaces exists", function() {
-      return it("space separates the undasherized/capitalized versions of the namespace and event name", function() {
-        expect(_.humanizeEventName('space:final-frontier')).toBe('Space: Final Frontier');
-        return expect(_.humanizeEventName('star-trek:the-next-generation')).toBe('Star Trek: The Next Generation');
+    return describe("when a namespaces exists", function () {
+      return it("space separates the undasherized/capitalized versions of the namespace and event name", function () {
+        expect(_.humanizeEventName("space:final-frontier")).toBe("Space: Final Frontier");
+        return expect(_.humanizeEventName("star-trek:the-next-generation")).toBe(
+          "Star Trek: The Next Generation",
+        );
       });
     });
   });
-  describe("::humanizeKeystroke(keystroke)", function() {
-    it("replaces single keystroke", function() {
-      expect(_.humanizeKeystroke('cmd-O', 'darwin')).toEqual('⌘⇧O');
-      expect(_.humanizeKeystroke('cmd-O', 'linux')).toEqual('Cmd+Shift+O');
-      expect(_.humanizeKeystroke('cmd-shift-up', 'darwin')).toEqual('⌘⇧↑');
-      expect(_.humanizeKeystroke('cmd-shift-up', 'linux')).toEqual('Cmd+Shift+Up');
-      expect(_.humanizeKeystroke('cmd-option-down', 'darwin')).toEqual('⌘⌥↓');
-      expect(_.humanizeKeystroke('cmd-option-down', 'linux')).toEqual('Cmd+Alt+Down');
-      expect(_.humanizeKeystroke('cmd-option-left', 'darwin')).toEqual('⌘⌥←');
-      expect(_.humanizeKeystroke('cmd-option-left', 'linux')).toEqual('Cmd+Alt+Left');
-      expect(_.humanizeKeystroke('cmd-option-right', 'darwin')).toEqual('⌘⌥→');
-      expect(_.humanizeKeystroke('cmd-option-right', 'linux')).toEqual('Cmd+Alt+Right');
-      expect(_.humanizeKeystroke('cmd-o', 'darwin')).toEqual('⌘O');
-      expect(_.humanizeKeystroke('cmd-o', 'linux')).toEqual('Cmd+O');
-      expect(_.humanizeKeystroke('ctrl-2', 'darwin')).toEqual('⌃2');
-      expect(_.humanizeKeystroke('ctrl-2', 'linux')).toEqual('Ctrl+2');
-      expect(_.humanizeKeystroke('cmd-space', 'darwin')).toEqual('⌘space');
-      expect(_.humanizeKeystroke('cmd-space', 'linux')).toEqual('Cmd+Space');
-      expect(_.humanizeKeystroke('cmd-|', 'darwin')).toEqual('⌘⇧\\');
-      expect(_.humanizeKeystroke('cmd-|', 'linux')).toEqual('Cmd+Shift+\\');
-      expect(_.humanizeKeystroke('cmd-}', 'darwin')).toEqual('⌘⇧]');
-      expect(_.humanizeKeystroke('cmd-}', 'linux')).toEqual('Cmd+Shift+]');
-      expect(_.humanizeKeystroke('cmd--', 'darwin')).toEqual('⌘-');
-      return expect(_.humanizeKeystroke('cmd--', 'linux')).toEqual('Cmd+-');
+  describe("::humanizeKeystroke(keystroke)", function () {
+    it("replaces single keystroke", function () {
+      expect(_.humanizeKeystroke("cmd-O", "darwin")).toEqual("⌘⇧O");
+      expect(_.humanizeKeystroke("cmd-O", "linux")).toEqual("Cmd+Shift+O");
+      expect(_.humanizeKeystroke("cmd-shift-up", "darwin")).toEqual("⌘⇧↑");
+      expect(_.humanizeKeystroke("cmd-shift-up", "linux")).toEqual("Cmd+Shift+Up");
+      expect(_.humanizeKeystroke("cmd-option-down", "darwin")).toEqual("⌘⌥↓");
+      expect(_.humanizeKeystroke("cmd-option-down", "linux")).toEqual("Cmd+Alt+Down");
+      expect(_.humanizeKeystroke("cmd-option-left", "darwin")).toEqual("⌘⌥←");
+      expect(_.humanizeKeystroke("cmd-option-left", "linux")).toEqual("Cmd+Alt+Left");
+      expect(_.humanizeKeystroke("cmd-option-right", "darwin")).toEqual("⌘⌥→");
+      expect(_.humanizeKeystroke("cmd-option-right", "linux")).toEqual("Cmd+Alt+Right");
+      expect(_.humanizeKeystroke("cmd-o", "darwin")).toEqual("⌘O");
+      expect(_.humanizeKeystroke("cmd-o", "linux")).toEqual("Cmd+O");
+      expect(_.humanizeKeystroke("ctrl-2", "darwin")).toEqual("⌃2");
+      expect(_.humanizeKeystroke("ctrl-2", "linux")).toEqual("Ctrl+2");
+      expect(_.humanizeKeystroke("cmd-space", "darwin")).toEqual("⌘space");
+      expect(_.humanizeKeystroke("cmd-space", "linux")).toEqual("Cmd+Space");
+      expect(_.humanizeKeystroke("cmd-|", "darwin")).toEqual("⌘⇧\\");
+      expect(_.humanizeKeystroke("cmd-|", "linux")).toEqual("Cmd+Shift+\\");
+      expect(_.humanizeKeystroke("cmd-}", "darwin")).toEqual("⌘⇧]");
+      expect(_.humanizeKeystroke("cmd-}", "linux")).toEqual("Cmd+Shift+]");
+      expect(_.humanizeKeystroke("cmd--", "darwin")).toEqual("⌘-");
+      return expect(_.humanizeKeystroke("cmd--", "linux")).toEqual("Cmd+-");
     });
-    it("correctly replaces keystrokes with shift and capital letter", function() {
-      expect(_.humanizeKeystroke('cmd-shift-P', 'darwin')).toEqual('⌘⇧P');
-      return expect(_.humanizeKeystroke('cmd-shift-P', 'linux')).toEqual('Cmd+Shift+P');
+    it("correctly replaces keystrokes with shift and capital letter", function () {
+      expect(_.humanizeKeystroke("cmd-shift-P", "darwin")).toEqual("⌘⇧P");
+      return expect(_.humanizeKeystroke("cmd-shift-P", "linux")).toEqual("Cmd+Shift+P");
     });
-    it("replaces multiple keystrokes", function() {
-      expect(_.humanizeKeystroke('cmd-O cmd-n', 'darwin')).toEqual('⌘⇧O ⌘N');
-      expect(_.humanizeKeystroke('cmd-O cmd-n', 'linux')).toEqual('Cmd+Shift+O Cmd+N');
-      expect(_.humanizeKeystroke('cmd-shift-- cmd-n', 'darwin')).toEqual('⌘⇧- ⌘N');
-      expect(_.humanizeKeystroke('cmd-shift-- cmd-n', 'linux')).toEqual('Cmd+Shift+- Cmd+N');
-      expect(_.humanizeKeystroke('cmd-k right', 'darwin')).toEqual('⌘K →');
-      return expect(_.humanizeKeystroke('cmd-k right', 'linux')).toEqual('Cmd+K Right');
+    it("replaces multiple keystrokes", function () {
+      expect(_.humanizeKeystroke("cmd-O cmd-n", "darwin")).toEqual("⌘⇧O ⌘N");
+      expect(_.humanizeKeystroke("cmd-O cmd-n", "linux")).toEqual("Cmd+Shift+O Cmd+N");
+      expect(_.humanizeKeystroke("cmd-shift-- cmd-n", "darwin")).toEqual("⌘⇧- ⌘N");
+      expect(_.humanizeKeystroke("cmd-shift-- cmd-n", "linux")).toEqual("Cmd+Shift+- Cmd+N");
+      expect(_.humanizeKeystroke("cmd-k right", "darwin")).toEqual("⌘K →");
+      return expect(_.humanizeKeystroke("cmd-k right", "linux")).toEqual("Cmd+K Right");
     });
-    it("formats function keys", function() {
-      expect(_.humanizeKeystroke('cmd-f2', 'darwin')).toEqual('⌘F2');
-      return expect(_.humanizeKeystroke('cmd-f2', 'linux')).toEqual('Cmd+F2');
+    it("formats function keys", function () {
+      expect(_.humanizeKeystroke("cmd-f2", "darwin")).toEqual("⌘F2");
+      return expect(_.humanizeKeystroke("cmd-f2", "linux")).toEqual("Cmd+F2");
     });
-    it("handles junk input", function() {
+    it("handles junk input", function () {
       expect(_.humanizeKeystroke()).toEqual(void 0);
       expect(_.humanizeKeystroke(null)).toEqual(null);
-      return expect(_.humanizeKeystroke('')).toEqual('');
+      return expect(_.humanizeKeystroke("")).toEqual("");
     });
-    return it("resolves cmdorctrl to cmd symbol on darwin and Ctrl on other platforms", function() {
-      expect(_.humanizeKeystroke('cmdorctrl-f', 'darwin')).toEqual('⌘F');
-      expect(_.humanizeKeystroke('cmdorctrl-f', 'linux')).toEqual('Ctrl+F');
-      expect(_.humanizeKeystroke('cmdorctrl-f', 'win32')).toEqual('Ctrl+F');
-      expect(_.humanizeKeystroke('cmdorctrl-shift-f', 'darwin')).toEqual('⌘⇧F');
-      return expect(_.humanizeKeystroke('cmdorctrl-shift-f', 'linux')).toEqual('Ctrl+Shift+F');
+    return it("resolves cmdorctrl to cmd symbol on darwin and Ctrl on other platforms", function () {
+      expect(_.humanizeKeystroke("cmdorctrl-f", "darwin")).toEqual("⌘F");
+      expect(_.humanizeKeystroke("cmdorctrl-f", "linux")).toEqual("Ctrl+F");
+      expect(_.humanizeKeystroke("cmdorctrl-f", "win32")).toEqual("Ctrl+F");
+      expect(_.humanizeKeystroke("cmdorctrl-shift-f", "darwin")).toEqual("⌘⇧F");
+      return expect(_.humanizeKeystroke("cmdorctrl-shift-f", "linux")).toEqual("Ctrl+Shift+F");
     });
   });
-  describe("::deepExtend(objects...)", function() {
-    it("copies all key/values from each object onto the target", function() {
+  describe("::deepExtend(objects...)", function () {
+    it("copies all key/values from each object onto the target", function () {
       var first, result, second;
       first = {
         things: {
           string: "oh",
           boolean: false,
-          anotherArray: ['a', 'b', 'c'],
+          anotherArray: ["a", "b", "c"],
           object: {
             first: 1,
-            second: 2
-          }
-        }
+            second: 2,
+          },
+        },
       };
       second = {
         things: {
           string: "cool",
           array: [1, 2, 3],
-          anotherArray: ['aa', 'bb', 'cc'],
+          anotherArray: ["aa", "bb", "cc"],
           object: {
-            first: 1
+            first: 1,
           },
           newObject: {
-            first: 'one'
-          }
-        }
+            first: "one",
+          },
+        },
       };
       result = _.deepExtend(first, second);
       expect(result).toBe(first);
@@ -206,114 +211,135 @@ describe("underscore extensions", function() {
           string: "cool",
           boolean: false,
           array: [1, 2, 3],
-          anotherArray: ['aa', 'bb', 'cc'],
+          anotherArray: ["aa", "bb", "cc"],
           object: {
             first: 1,
-            second: 2
+            second: 2,
           },
           newObject: {
-            first: 'one'
-          }
-        }
+            first: "one",
+          },
+        },
       });
       return expect(result.things.newObject).not.toBe(second.things.newObject);
     });
-    it("prefers values from later objects over those from earlier objects", function() {
+    it("prefers values from later objects over those from earlier objects", function () {
       var first, second;
       first = {
         things: {
-          string: 'oh'
+          string: "oh",
         },
-        otherThings: ['one', 'two']
+        otherThings: ["one", "two"],
       };
       second = {
         things: false,
-        otherThings: null
+        otherThings: null,
       };
       return expect(_.deepExtend(first, second)).toEqual({
         things: false,
-        otherThings: null
+        otherThings: null,
       });
     });
-    return it("overrides objects with scalar values", function() {
-      expect(_.deepExtend({
-        a: {
-          b: "c"
-        }
-      }, {
-        a: "d"
-      })).toEqual({
-        a: "d"
+    return it("overrides objects with scalar values", function () {
+      expect(
+        _.deepExtend(
+          {
+            a: {
+              b: "c",
+            },
+          },
+          {
+            a: "d",
+          },
+        ),
+      ).toEqual({
+        a: "d",
       });
-      expect(_.deepExtend({
+      expect(
+        _.deepExtend(
+          {
+            a: {
+              b: "c",
+            },
+          },
+          {
+            a: "d",
+          },
+          {
+            a: {
+              e: "f",
+            },
+          },
+        ),
+      ).toEqual({
         a: {
-          b: "c"
-        }
-      }, {
-        a: "d"
-      }, {
-        a: {
-          e: "f"
-        }
-      })).toEqual({
-        a: {
-          e: "f"
-        }
+          e: "f",
+        },
       });
-      return expect(_.deepExtend({
-        a: {
-          b: "c"
-        }
-      }, {
-        a: "d"
-      }, {
-        a: "e"
-      })).toEqual({
-        a: "e"
+      return expect(
+        _.deepExtend(
+          {
+            a: {
+              b: "c",
+            },
+          },
+          {
+            a: "d",
+          },
+          {
+            a: "e",
+          },
+        ),
+      ).toEqual({
+        a: "e",
       });
     });
   });
-  describe("::deepContains(array, target)", function() {
+  describe("::deepContains(array, target)", function () {
     var subject;
     subject = null;
-    beforeEach(function() {
-      return subject = [
+    beforeEach(function () {
+      return (subject = [
         {
           one: 1,
           two: {
-            three: 3
-          }
+            three: 3,
+          },
         },
         {
           four: 4,
           five: {
-            six: 6
-          }
+            six: 6,
+          },
         },
-        'omgkittens'
-      ];
+        "omgkittens",
+      ]);
     });
-    it("returns true for a matching object in the array", function() {
-      expect(_.deepContains(subject, {
-        four: 4,
-        five: {
-          six: 6
-        }
-      })).toBe(true);
-      return expect(_.deepContains(subject, 'omgkittens')).toBe(true);
+    it("returns true for a matching object in the array", function () {
+      expect(
+        _.deepContains(subject, {
+          four: 4,
+          five: {
+            six: 6,
+          },
+        }),
+      ).toBe(true);
+      return expect(_.deepContains(subject, "omgkittens")).toBe(true);
     });
-    return it("returns false when it does not find a match in the array", function() {
-      expect(_.deepContains(subject, {
-        four: 4,
-        five: {
-          six: 7
-        }
-      })).toBe(false);
-      return expect(_.deepContains(subject, 'nope')).toBe(false);
+    return it("returns false when it does not find a match in the array", function () {
+      expect(
+        _.deepContains(subject, {
+          four: 4,
+          five: {
+            six: 7,
+          },
+        }),
+      ).toBe(false);
+      return expect(_.deepContains(subject, "nope")).toBe(false);
     });
   });
-  describe("::isSubset(potentialSubset, potentialSuperset)", function() {
-    return it("returns whether the first argument is a subset of the second", function() {
+  describe("::isSubset(potentialSubset, potentialSuperset)", function () {
+    return it("returns whether the first argument is a subset of the second", function () {
       expect(_.isSubset([1, 2], [1, 2])).toBeTruthy();
       expect(_.isSubset([1, 2], [1, 2, 3])).toBeTruthy();
       expect(_.isSubset([], [1])).toBeTruthy();
@@ -321,78 +347,91 @@ describe("underscore extensions", function() {
       return expect(_.isSubset([1, 2], [2, 3])).toBeFalsy();
     });
   });
-  describe('::isEqual(a, b)', function() {
-    it('returns true when the elements are equal, false otherwise', function() {
+  describe("::isEqual(a, b)", function () {
+    it("returns true when the elements are equal, false otherwise", function () {
       var a, b, domElement1, domElement2;
       expect(_.isEqual(null, null)).toBe(true);
-      expect(_.isEqual('test', 'test')).toBe(true);
+      expect(_.isEqual("test", "test")).toBe(true);
       expect(_.isEqual(3, 3)).toBe(true);
-      expect(_.isEqual({
-        a: 'b'
-      }, {
-        a: 'b'
-      })).toBe(true);
-      expect(_.isEqual([1, 'a'], [1, 'a'])).toBe(true);
-      expect(_.isEqual(null, 'test')).toBe(false);
+      expect(
+        _.isEqual(
+          {
+            a: "b",
+          },
+          {
+            a: "b",
+          },
+        ),
+      ).toBe(true);
+      expect(_.isEqual([1, "a"], [1, "a"])).toBe(true);
+      expect(_.isEqual(null, "test")).toBe(false);
       expect(_.isEqual(3, 4)).toBe(false);
-      expect(_.isEqual({
-        a: 'b'
-      }, {
-        a: 'c'
-      })).toBe(false);
-      expect(_.isEqual({
-        a: 'b'
-      }, {
-        a: 'b',
-        c: 'd'
-      })).toBe(false);
-      expect(_.isEqual([1, 'a'], [2])).toBe(false);
-      expect(_.isEqual([1, 'a'], [1, 'b'])).toBe(false);
+      expect(
+        _.isEqual(
+          {
+            a: "b",
+          },
+          {
+            a: "c",
+          },
+        ),
+      ).toBe(false);
+      expect(
+        _.isEqual(
+          {
+            a: "b",
+          },
+          {
+            a: "b",
+            c: "d",
+          },
+        ),
+      ).toBe(false);
+      expect(_.isEqual([1, "a"], [2])).toBe(false);
+      expect(_.isEqual([1, "a"], [1, "b"])).toBe(false);
       a = {
-        isEqual: function(other) {
+        isEqual: function (other) {
           return other === b;
-        }
+        },
       };
       b = {
-        isEqual: function(other) {
-          return other === 'test';
-        }
+        isEqual: function (other) {
+          return other === "test";
+        },
       };
       expect(_.isEqual(a, null)).toBe(false);
-      expect(_.isEqual(a, 'test')).toBe(false);
+      expect(_.isEqual(a, "test")).toBe(false);
       expect(_.isEqual(a, b)).toBe(true);
       expect(_.isEqual(null, b)).toBe(false);
-      expect(_.isEqual('test', b)).toBe(true);
+      expect(_.isEqual("test", b)).toBe(true);
       expect(_.isEqual(/a/, /a/g)).toBe(false);
       expect(_.isEqual(/a/, /b/)).toBe(false);
       expect(_.isEqual(/a/gi, /a/gi)).toBe(true);
       // Simulate DOM element comparison
       domElement1 = {
         nodeType: 1,
-        a: 2
+        a: 2,
       };
       domElement2 = {
         nodeType: 1,
-        a: 2
+        a: 2,
       };
       expect(_.isEqual(domElement1, domElement2)).toBe(false);
       expect(_.isEqual(domElement2, domElement1)).toBe(false);
       expect(_.isEqual(domElement1, domElement1)).toBe(true);
       return expect(_.isEqual(domElement2, domElement2)).toBe(true);
     });
-    it("calls custom equality methods with stacks so they can participate in cycle-detection", function() {
+    it("calls custom equality methods with stacks so they can participate in cycle-detection", function () {
       var X, Y, x1, x2, y1, y2;
       X = class X {
         isEqual(b, aStack, bStack) {
           return _.isEqual(this.y, b.y, aStack, bStack);
         }
-
       };
       Y = class Y {
         isEqual(b, aStack, bStack) {
           return _.isEqual(this.x, b.x, aStack, bStack);
         }
-
       };
       x1 = new X();
       y1 = new Y();
@@ -404,203 +443,217 @@ describe("underscore extensions", function() {
       y2.x = x2;
       return expect(_.isEqual(x1, x2)).toBe(true);
     });
-    return it("only accepts arrays as stack arguments to avoid accidentally calling with other objects", function() {
-      expect(function() {
+    return it("only accepts arrays as stack arguments to avoid accidentally calling with other objects", function () {
+      expect(function () {
         return _.isEqual({}, {}, "junk");
       }).not.toThrow();
-      return expect(function() {
+      return expect(function () {
         return _.isEqual({}, {}, [], "junk");
       }).not.toThrow();
     });
   });
-  describe("::isEqualForProperties(a, b, properties...)", function() {
-    return it("compares two objects for equality using just the specified properties", function() {
-      expect(_.isEqualForProperties({
-        a: 1,
-        b: 2,
-        c: 3
-      }, {
-        a: 1,
-        b: 2,
-        c: 4
-      }, 'a', 'b')).toBe(true);
-      return expect(_.isEqualForProperties({
-        a: 1,
-        b: 2,
-        c: 3
-      }, {
-        a: 1,
-        b: 2,
-        c: 4
-      }, 'a', 'c')).toBe(false);
+  describe("::isEqualForProperties(a, b, properties...)", function () {
+    return it("compares two objects for equality using just the specified properties", function () {
+      expect(
+        _.isEqualForProperties(
+          {
+            a: 1,
+            b: 2,
+            c: 3,
+          },
+          {
+            a: 1,
+            b: 2,
+            c: 4,
+          },
+          "a",
+          "b",
+        ),
+      ).toBe(true);
+      return expect(
+        _.isEqualForProperties(
+          {
+            a: 1,
+            b: 2,
+            c: 3,
+          },
+          {
+            a: 1,
+            b: 2,
+            c: 4,
+          },
+          "a",
+          "c",
+        ),
+      ).toBe(false);
     });
   });
-  describe("::capitalize(word)", function() {
-    return it("capitalizes the word", function() {
-      expect(_.capitalize('')).toBe('');
-      expect(_.capitalize(null)).toBe('');
-      expect(_.capitalize()).toBe('');
-      expect(_.capitalize('Github')).toBe('GitHub');
-      return expect(_.capitalize('test')).toBe('Test');
+  describe("::capitalize(word)", function () {
+    return it("capitalizes the word", function () {
+      expect(_.capitalize("")).toBe("");
+      expect(_.capitalize(null)).toBe("");
+      expect(_.capitalize()).toBe("");
+      expect(_.capitalize("Github")).toBe("GitHub");
+      return expect(_.capitalize("test")).toBe("Test");
     });
   });
-  describe("::dasherize(word)", function() {
-    return it("dasherizes the word", function() {
-      expect(_.dasherize('')).toBe('');
-      expect(_.dasherize(null)).toBe('');
-      expect(_.dasherize()).toBe('');
-      expect(_.dasherize('a_b')).toBe('a-b');
-      return expect(_.dasherize('test')).toBe('test');
+  describe("::dasherize(word)", function () {
+    return it("dasherizes the word", function () {
+      expect(_.dasherize("")).toBe("");
+      expect(_.dasherize(null)).toBe("");
+      expect(_.dasherize()).toBe("");
+      expect(_.dasherize("a_b")).toBe("a-b");
+      return expect(_.dasherize("test")).toBe("test");
     });
   });
-  describe("::uncamelcase(string)", function() {
-    return it("uncamelcases the string", function() {
-      expect(_.uncamelcase('')).toBe('');
-      expect(_.uncamelcase(null)).toBe('');
-      expect(_.uncamelcase()).toBe('');
-      expect(_.uncamelcase('a_b')).toBe('A b');
-      expect(_.uncamelcase('TheOffice')).toBe('The Office');
-      expect(_.uncamelcase('theOffice')).toBe('The Office');
-      expect(_.uncamelcase('test')).toBe('Test');
-      expect(_.uncamelcase(' test ')).toBe('Test');
-      return expect(_.uncamelcase('__ParksAndRec')).toBe('Parks And Rec');
+  describe("::uncamelcase(string)", function () {
+    return it("uncamelcases the string", function () {
+      expect(_.uncamelcase("")).toBe("");
+      expect(_.uncamelcase(null)).toBe("");
+      expect(_.uncamelcase()).toBe("");
+      expect(_.uncamelcase("a_b")).toBe("A b");
+      expect(_.uncamelcase("TheOffice")).toBe("The Office");
+      expect(_.uncamelcase("theOffice")).toBe("The Office");
+      expect(_.uncamelcase("test")).toBe("Test");
+      expect(_.uncamelcase(" test ")).toBe("Test");
+      return expect(_.uncamelcase("__ParksAndRec")).toBe("Parks And Rec");
     });
   });
-  describe("::valueForKeyPath(object, keyPath)", function() {
-    it("retrieves the value at the given key path or undefined if none exists", function() {
+  describe("::valueForKeyPath(object, keyPath)", function () {
+    it("retrieves the value at the given key path or undefined if none exists", function () {
       var object;
       object = {
         a: {
           b: {
-            c: 2
-          }
-        }
+            c: 2,
+          },
+        },
       };
-      expect(_.valueForKeyPath(object, 'a.b.c')).toBe(2);
-      expect(_.valueForKeyPath(object, 'a.b')).toEqual({
-        c: 2
+      expect(_.valueForKeyPath(object, "a.b.c")).toBe(2);
+      expect(_.valueForKeyPath(object, "a.b")).toEqual({
+        c: 2,
       });
-      return expect(_.valueForKeyPath(object, 'a.x')).toBeUndefined();
+      return expect(_.valueForKeyPath(object, "a.x")).toBeUndefined();
     });
-    it("retrieves the value at the when the key contains a dot", function() {
+    it("retrieves the value at the when the key contains a dot", function () {
       var object;
       object = {
         a: {
           b: {
-            'c\\.d': 2
-          }
-        }
+            "c\\.d": 2,
+          },
+        },
       };
-      expect(_.valueForKeyPath(object, 'a.b.c\\.d')).toBe(2);
-      expect(_.valueForKeyPath(object, 'a.b')).toEqual({
-        'c\\.d': 2
+      expect(_.valueForKeyPath(object, "a.b.c\\.d")).toBe(2);
+      expect(_.valueForKeyPath(object, "a.b")).toEqual({
+        "c\\.d": 2,
       });
-      return expect(_.valueForKeyPath(object, 'a.x')).toBeUndefined();
+      return expect(_.valueForKeyPath(object, "a.x")).toBeUndefined();
     });
-    return it("returns the object when no key path is given", function() {
+    return it("returns the object when no key path is given", function () {
       var object;
       object = {
         a: {
           b: {
-            'c\\.d': 2
-          }
-        }
+            "c\\.d": 2,
+          },
+        },
       };
       expect(_.valueForKeyPath(object, null)).toBe(object);
       return expect(_.valueForKeyPath(object)).toBe(object);
     });
   });
-  describe("::setValueForKeyPath(object, keyPath, value)", function() {
-    it("assigns a value at the given key path, creating intermediate objects if needed", function() {
+  describe("::setValueForKeyPath(object, keyPath, value)", function () {
+    it("assigns a value at the given key path, creating intermediate objects if needed", function () {
       var object;
       object = {};
-      _.setValueForKeyPath(object, 'a.b.c', 1);
-      _.setValueForKeyPath(object, 'd', 2);
+      _.setValueForKeyPath(object, "a.b.c", 1);
+      _.setValueForKeyPath(object, "d", 2);
       return expect(object).toEqual({
         a: {
           b: {
-            c: 1
-          }
-        },
-        d: 2
-      });
-    });
-    return it("assigns a value at the given key path when the key has a dot in it", function() {
-      var object;
-      object = {};
-      _.setValueForKeyPath(object, 'a.b.c', 1);
-      _.setValueForKeyPath(object, 'd\\.e', 2);
-      return expect(object).toEqual({
-        a: {
-          b: {
-            c: 1
-          }
-        },
-        'd\\.e': 2
-      });
-    });
-  });
-  describe("::hasKeyPath(object, keyPath)", function() {
-    return it("determines whether the given object has properties along the given key path", function() {
-      var object;
-      object = {
-        a: {
-          b: {
-            c: 2
+            c: 1,
           },
-          'd\\.e': 3
-        }
-      };
-      expect(_.hasKeyPath(object, 'a')).toBe(true);
-      expect(_.hasKeyPath(object, 'a.b.c')).toBe(true);
-      expect(_.hasKeyPath(object, 'a.b.c.d')).toBe(false);
-      expect(_.hasKeyPath(object, 'a.x')).toBe(false);
-      return expect(_.hasKeyPath(object, 'a.d\\.e')).toBe(true);
+        },
+        d: 2,
+      });
+    });
+    return it("assigns a value at the given key path when the key has a dot in it", function () {
+      var object;
+      object = {};
+      _.setValueForKeyPath(object, "a.b.c", 1);
+      _.setValueForKeyPath(object, "d\\.e", 2);
+      return expect(object).toEqual({
+        a: {
+          b: {
+            c: 1,
+          },
+        },
+        "d\\.e": 2,
+      });
     });
   });
-  describe("deepClone(object)", function() {
-    return it("clones nested object", function() {
+  describe("::hasKeyPath(object, keyPath)", function () {
+    return it("determines whether the given object has properties along the given key path", function () {
       var object;
       object = {
         a: {
-          b: 'test',
+          b: {
+            c: 2,
+          },
+          "d\\.e": 3,
+        },
+      };
+      expect(_.hasKeyPath(object, "a")).toBe(true);
+      expect(_.hasKeyPath(object, "a.b.c")).toBe(true);
+      expect(_.hasKeyPath(object, "a.b.c.d")).toBe(false);
+      expect(_.hasKeyPath(object, "a.x")).toBe(false);
+      return expect(_.hasKeyPath(object, "a.d\\.e")).toBe(true);
+    });
+  });
+  describe("deepClone(object)", function () {
+    return it("clones nested object", function () {
+      var object;
+      object = {
+        a: {
+          b: "test",
           c: {
-            d: function() {
-              return console.log('hi');
-            }
+            d: function () {
+              return console.log("hi");
+            },
           },
           e: 3,
-          f: [4, 'abc']
-        }
+          f: [4, "abc"],
+        },
       };
       return expect(_.deepClone(object)).toEqual(object);
     });
   });
-  return describe("::escapeRegExp(string)", function() {
-    it("returns a regular expression pattern that can will match the given string", function() {
+  return describe("::escapeRegExp(string)", function () {
+    it("returns a regular expression pattern that can will match the given string", function () {
       var check;
-      check = function(source) {
+      check = function (source) {
         var regex;
         regex = new RegExp(_.escapeRegExp(source));
         return expect(source.match(regex)[0]).toBe(source);
       };
-      check('ab');
-      check('a[b');
-      check('a]b');
-      check('a(b');
-      check('a)b');
-      check('a-b');
-      check('[a-b]');
-      check('a{2}b{3}');
-      check('a|b');
-      check('([a-b])');
-      check('a?b?');
-      return check('a...b...');
+      check("ab");
+      check("a[b");
+      check("a]b");
+      check("a(b");
+      check("a)b");
+      check("a-b");
+      check("[a-b]");
+      check("a{2}b{3}");
+      check("a|b");
+      check("([a-b])");
+      check("a?b?");
+      return check("a...b...");
     });
-    return it("returns a pattern that can be used within a character class", function() {
+    return it("returns a pattern that can be used within a character class", function () {
       var regex;
       regex = new RegExp(`[${_.escapeRegExp("a-b")}]`);
-      return expect("-".match(regex)[0]).toBe('-');
+      return expect("-".match(regex)[0]).toBe("-");
     });
   });
 });
