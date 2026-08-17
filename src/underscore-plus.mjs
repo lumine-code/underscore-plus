@@ -204,17 +204,19 @@ export function escapeRegExp(string) {
   }
 }
 
-// The words a title cannot spell by capitalising a dash-segment. Three rules
+// The words a title cannot spell by capitalising a dash-segment. Four rules
 // govern the map: an entry matches a whole segment only, so `application:hide`
 // is untouched by `ide`; an entry earns its place only when a real command or
-// package name uses it, never speculatively; and a value re-cases a segment
-// rather than repairing a squashed one — a title that wants a space wants a
-// dash in the name it came from.
+// package name uses it, never speculatively; a value re-cases a segment rather
+// than repairing a squashed one — a title that wants a space wants a dash in
+// the name it came from; and the vocabulary is what every consumer shares, so
+// a word only one domain uses belongs to that domain. SOFiSTiK's jargon —
+// WPS, CDB, SOFiPLUS — is spelled by the SOFiSTiK packages themselves; only
+// the product name is here, because a package name is spelled everywhere.
 export const ACRONYMS = new Map([
   ["ansi", "ANSI"],
   ["api", "API"],
   ["bibtex", "BibTeX"],
-  ["cdb", "CDB"],
   ["ci", "CI"],
   ["csharp", "C#"],
   ["css", "CSS"],
@@ -242,12 +244,10 @@ export const ACRONYMS = new Map([
   ["noqa", "NOQA"],
   ["pdf", "PDF"],
   ["php", "PHP"],
-  ["plb", "PLB"],
   ["png", "PNG"],
   ["repl", "REPL"],
   ["rgb", "RGB"],
   ["sofistik", "SOFiSTiK"],
-  ["sps", "SPS"],
   ["sql", "SQL"],
   ["svg", "SVG"],
   ["synctex", "SyncTeX"],
@@ -258,10 +258,7 @@ export const ACRONYMS = new Map([
   ["ui", "UI"],
   ["uri", "URI"],
   ["url", "URL"],
-  ["urs", "URS"],
   ["vscode", "VS Code"],
-  ["wingraf", "WinGRAF"],
-  ["wps", "WPS"],
   ["xml", "XML"],
   ["yaml", "YAML"],
 ]);

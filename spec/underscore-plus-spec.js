@@ -125,11 +125,16 @@ describe("underscore extensions", function () {
     return describe("when a segment is an acronym", function () {
       it("spells it in both halves of the name", function () {
         expect(_.humanizeEventName("pdf-view:open-tex")).toBe("PDF View: Open TeX");
-        expect(_.humanizeEventName("sofistik-tools:calculation-wps")).toBe(
-          "SOFiSTiK Tools: Calculation WPS",
-        );
+        expect(_.humanizeEventName("sofistik-tools:ifc-export")).toBe("SOFiSTiK Tools: IFC Export");
         expect(_.humanizeEventName("autoclose-html:toggle")).toBe("Autoclose HTML: Toggle");
         return expect(_.humanizeEventName("jupyter-repl")).toBe("Jupyter REPL");
+      });
+      it("leaves a single domain's jargon to that domain", function () {
+        // WPS is SOFiSTiK's, and is spelled by a displayName in the package
+        // that owns the command rather than by a word every consumer carries.
+        return expect(_.humanizeEventName("sofistik-tools:calculation-wps")).toBe(
+          "SOFiSTiK Tools: Calculation Wps",
+        );
       });
       return it("only matches a whole segment", function () {
         expect(_.humanizeEventName("application:hide")).toBe("Application: Hide");
