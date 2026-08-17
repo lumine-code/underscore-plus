@@ -204,15 +204,88 @@ export function escapeRegExp(string) {
   }
 }
 
+// The words a title cannot spell by capitalising a dash-segment. Three rules
+// govern the map: an entry matches a whole segment only, so `application:hide`
+// is untouched by `ide`; an entry earns its place only when a real command or
+// package name uses it, never speculatively; and a value re-cases a segment
+// rather than repairing a squashed one — a title that wants a space wants a
+// dash in the name it came from.
+export const ACRONYMS = new Map([
+  ["ansi", "ANSI"],
+  ["api", "API"],
+  ["bibtex", "BibTeX"],
+  ["cdb", "CDB"],
+  ["ci", "CI"],
+  ["csharp", "C#"],
+  ["css", "CSS"],
+  ["csv", "CSV"],
+  ["docx", "DOCX"],
+  ["dxf", "DXF"],
+  ["eol", "EOL"],
+  ["eslint", "ESLint"],
+  ["gfm", "GFM"],
+  ["github", "GitHub"],
+  ["graphql", "GraphQL"],
+  ["hcl", "HCL"],
+  ["hsl", "HSL"],
+  ["html", "HTML"],
+  ["http", "HTTP"],
+  ["ide", "IDE"],
+  ["ifc", "IFC"],
+  ["ini", "INI"],
+  ["javascript", "JavaScript"],
+  ["json", "JSON"],
+  ["kdl", "KDL"],
+  ["latex", "LaTeX"],
+  ["lsp", "LSP"],
+  ["mcp", "MCP"],
+  ["noqa", "NOQA"],
+  ["pdf", "PDF"],
+  ["php", "PHP"],
+  ["plb", "PLB"],
+  ["png", "PNG"],
+  ["repl", "REPL"],
+  ["rgb", "RGB"],
+  ["sofistik", "SOFiSTiK"],
+  ["sps", "SPS"],
+  ["sql", "SQL"],
+  ["svg", "SVG"],
+  ["synctex", "SyncTeX"],
+  ["tcl", "Tcl"],
+  ["tex", "TeX"],
+  ["toml", "TOML"],
+  ["typescript", "TypeScript"],
+  ["ui", "UI"],
+  ["uri", "URI"],
+  ["url", "URL"],
+  ["urs", "URS"],
+  ["vscode", "VS Code"],
+  ["wingraf", "WinGRAF"],
+  ["wps", "WPS"],
+  ["xml", "XML"],
+  ["yaml", "YAML"],
+]);
+
+export function titleize(string) {
+  if (string) {
+    return string
+      .split("-")
+      .map((word) => ACRONYMS.get(word.toLowerCase()) ?? capitalize(word))
+      .join(" ");
+  } else {
+    return "";
+  }
+}
+
 export function humanizeEventName(eventName, eventDoc) {
   const [namespace, event] = eventName.split(":");
   if (event == null) {
-    return undasherize(namespace);
+    return titleize(namespace);
   }
 
-  const namespaceDoc = undasherize(namespace);
+  const namespaceDoc = titleize(namespace);
   if (eventDoc == null) {
-    eventDoc = undasherize(event);
+    eventDoc = titleize(event);
   }
 
   return `${namespaceDoc}: ${eventDoc}`;
@@ -537,6 +610,7 @@ function isEqual_(a, b, aStack = [], bStack = []) {
 
 export default {
   ..._,
+  ACRONYMS,
   adviseBefore,
   camelize,
   capitalize,
@@ -561,6 +635,7 @@ export default {
   hasKeyPath,
   spliceWithArray,
   sum,
+  titleize,
   uncamelcase,
   undasherize,
   underscore,

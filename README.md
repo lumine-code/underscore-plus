@@ -7,6 +7,7 @@ Extends Underscore with additional utility functions.
 - **Complete Underscore API**: re-exports every function from [Underscore](https://underscorejs.org/).
 - **Object utilities**: adds key-path access, deep cloning, deep extension, and focused equality helpers.
 - **String utilities**: provides case conversion, escaping, pluralization, and readable event names.
+- **Acronym vocabulary**: titles spell the words with a casing of their own, so `pdf-view` reads as `PDF View`.
 - **Keystroke labels**: formats platform-specific shortcut labels for Windows, macOS, and Linux.
 
 ## Installation

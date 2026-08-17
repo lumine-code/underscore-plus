@@ -114,13 +114,38 @@ describe("underscore extensions", function () {
         return expect(_.humanizeEventName("no-name-space")).toBe("No Name Space");
       });
     });
-    return describe("when a namespaces exists", function () {
+    describe("when a namespaces exists", function () {
       return it("space separates the undasherized/capitalized versions of the namespace and event name", function () {
         expect(_.humanizeEventName("space:final-frontier")).toBe("Space: Final Frontier");
         return expect(_.humanizeEventName("star-trek:the-next-generation")).toBe(
           "Star Trek: The Next Generation",
         );
       });
+    });
+    return describe("when a segment is an acronym", function () {
+      it("spells it in both halves of the name", function () {
+        expect(_.humanizeEventName("pdf-view:open-tex")).toBe("PDF View: Open TeX");
+        expect(_.humanizeEventName("sofistik-tools:calculation-wps")).toBe(
+          "SOFiSTiK Tools: Calculation WPS",
+        );
+        expect(_.humanizeEventName("autoclose-html:toggle")).toBe("Autoclose HTML: Toggle");
+        return expect(_.humanizeEventName("jupyter-repl")).toBe("Jupyter REPL");
+      });
+      return it("only matches a whole segment", function () {
+        expect(_.humanizeEventName("application:hide")).toBe("Application: Hide");
+        return expect(_.humanizeEventName("editor:fold-all")).toBe("Editor: Fold All");
+      });
+    });
+  });
+  describe("::titleize(string)", function () {
+    it("undasherizes and capitalizes each word", function () {
+      expect(_.titleize("no-name-space")).toBe("No Name Space");
+      return expect(_.titleize("")).toBe("");
+    });
+    return it("spells the words with a casing of their own", function () {
+      expect(_.titleize("latex-tools")).toBe("LaTeX Tools");
+      expect(_.titleize("ide-graphql")).toBe("IDE GraphQL");
+      return expect(_.titleize("vscode-theme")).toBe("VS Code Theme");
     });
   });
   describe("::humanizeKeystroke(keystroke)", function () {
