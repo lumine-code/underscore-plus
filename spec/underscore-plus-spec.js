@@ -125,6 +125,7 @@ describe("underscore extensions", function () {
     return describe("when a segment is an acronym", function () {
       it("spells it in both halves of the name", function () {
         expect(_.humanizeEventName("pdf-view:open-tex")).toBe("PDF View: Open TeX");
+        expect(_.humanizeEventName("sqlite-view:execute-query")).toBe("SQLite View: Execute Query");
         expect(_.humanizeEventName("sofistik-tools:ifc-export")).toBe("SOFiSTiK Tools: IFC Export");
         expect(_.humanizeEventName("autoclose-html:toggle")).toBe("Autoclose HTML: Toggle");
         return expect(_.humanizeEventName("jupyter-repl")).toBe("Jupyter REPL");
@@ -150,6 +151,7 @@ describe("underscore extensions", function () {
     return it("spells the words with a casing of their own", function () {
       expect(_.titleize("latex-tools")).toBe("LaTeX Tools");
       expect(_.titleize("ide-graphql")).toBe("IDE GraphQL");
+      expect(_.titleize("sqlite-view")).toBe("SQLite View");
       return expect(_.titleize("vscode-theme")).toBe("VS Code Theme");
     });
   });

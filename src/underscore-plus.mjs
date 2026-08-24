@@ -249,6 +249,7 @@ export const ACRONYMS = new Map([
   ["rgb", "RGB"],
   ["sofistik", "SOFiSTiK"],
   ["sql", "SQL"],
+  ["sqlite", "SQLite"],
   ["svg", "SVG"],
   ["synctex", "SyncTeX"],
   ["tcl", "Tcl"],
