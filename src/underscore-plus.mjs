@@ -300,12 +300,6 @@ export function humanizeKey(key, platform = process.platform) {
     return modifierKeyMap[key];
   } else if (key.length === 1 && shiftKeyMap[key] != null) {
     return [modifierKeyMap.shift, shiftKeyMap[key]];
-  } else if (
-    key.length === 1 &&
-    key === key.toUpperCase() &&
-    key.toUpperCase() !== key.toLowerCase()
-  ) {
-    return [modifierKeyMap.shift, key.toUpperCase()];
   } else if (key.length === 1 || /f[0-9]{1,2}/.test(key)) {
     return key.toUpperCase();
   } else {
@@ -321,7 +315,7 @@ export function humanizeKey(key, platform = process.platform) {
 // attempts to mirror the text the given keystroke would have if displayed in
 // a system menu.
 //
-// keystroke - A String keystroke to humanize such as `ctrl-O`.
+// keystroke - A String keystroke to humanize such as `ctrl-o`.
 // platform  - An optional String platform to humanize for (default:
 //             `process.platform`).
 //

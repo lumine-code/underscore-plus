@@ -157,8 +157,8 @@ describe("underscore extensions", function () {
   });
   describe("::humanizeKeystroke(keystroke)", function () {
     it("replaces single keystroke", function () {
-      expect(_.humanizeKeystroke("cmd-O", "darwin")).toEqual("⌘⇧O");
-      expect(_.humanizeKeystroke("cmd-O", "linux")).toEqual("Cmd+Shift+O");
+      expect(_.humanizeKeystroke("cmd-O", "darwin")).toEqual("⌘O");
+      expect(_.humanizeKeystroke("cmd-O", "linux")).toEqual("Cmd+O");
       expect(_.humanizeKeystroke("cmd-shift-up", "darwin")).toEqual("⌘⇧↑");
       expect(_.humanizeKeystroke("cmd-shift-up", "linux")).toEqual("Cmd+Shift+Up");
       expect(_.humanizeKeystroke("cmd-option-down", "darwin")).toEqual("⌘⌥↓");
@@ -180,13 +180,13 @@ describe("underscore extensions", function () {
       expect(_.humanizeKeystroke("cmd--", "darwin")).toEqual("⌘-");
       return expect(_.humanizeKeystroke("cmd--", "linux")).toEqual("Cmd+-");
     });
-    it("correctly replaces keystrokes with shift and capital letter", function () {
-      expect(_.humanizeKeystroke("cmd-shift-P", "darwin")).toEqual("⌘⇧P");
-      return expect(_.humanizeKeystroke("cmd-shift-P", "linux")).toEqual("Cmd+Shift+P");
+    it("uses only explicit shift modifiers for letters", function () {
+      expect(_.humanizeKeystroke("cmd-shift-p", "darwin")).toEqual("⌘⇧P");
+      return expect(_.humanizeKeystroke("cmd-shift-p", "linux")).toEqual("Cmd+Shift+P");
     });
     it("replaces multiple keystrokes", function () {
-      expect(_.humanizeKeystroke("cmd-O cmd-n", "darwin")).toEqual("⌘⇧O ⌘N");
-      expect(_.humanizeKeystroke("cmd-O cmd-n", "linux")).toEqual("Cmd+Shift+O Cmd+N");
+      expect(_.humanizeKeystroke("cmd-o cmd-n", "darwin")).toEqual("⌘O ⌘N");
+      expect(_.humanizeKeystroke("cmd-o cmd-n", "linux")).toEqual("Cmd+O Cmd+N");
       expect(_.humanizeKeystroke("cmd-shift-- cmd-n", "darwin")).toEqual("⌘⇧- ⌘N");
       expect(_.humanizeKeystroke("cmd-shift-- cmd-n", "linux")).toEqual("Cmd+Shift+- Cmd+N");
       expect(_.humanizeKeystroke("cmd-k right", "darwin")).toEqual("⌘K →");
