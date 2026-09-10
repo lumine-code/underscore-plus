@@ -1,6 +1,6 @@
 {
   "name": "@lumine-code/underscore-plus",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "Extends Underscore with additional utility functions.",
   "license": "MIT",
   "main": "./lib/underscore-plus.js",
