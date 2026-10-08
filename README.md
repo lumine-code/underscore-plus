@@ -2,6 +2,8 @@
 
 Extends Underscore with additional utility functions.
 
+Fork of [pulsar-edit/underscore-plus](https://github.com/pulsar-edit/underscore-plus).
+
 ## Features
 
 - **Complete Underscore API**: re-exports every function from [Underscore](https://underscorejs.org/).
