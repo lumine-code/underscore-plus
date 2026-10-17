@@ -30,7 +30,8 @@
     "node": ">=24"
   },
   "files": [
-    "lib"
+    "lib",
+    "THIRD_PARTY_NOTICES"
   ],
   "dependencies": {
     "underscore": "^1.13.8"
